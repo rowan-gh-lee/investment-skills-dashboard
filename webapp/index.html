@@ -54,30 +54,32 @@
 
   /* ─── Header ─── */
   .header {
-    background: linear-gradient(135deg, #0f3b6b 0%, #2E86AB 50%, #3fa7c4 100%);
-    color: #fff;
-    border-radius: 0 0 24px 24px;
-    padding: 28px 32px 64px;
-    box-shadow: var(--shadow);
+    background: #0f2846;
+    color: #e6edf7;
+    border-bottom: 1px solid #1e3a5f;
+    padding: 26px 32px 56px;
   }
+  html[data-theme="dark"] .header { background: #0a1a30; border-bottom-color: #1a2c4a; }
   .header .brand {
-    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-    opacity: .85; margin-bottom: 8px;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: #8fa7c5; margin-bottom: 10px; font-weight: 600;
   }
   .header h1 {
-    margin: 0 0 10px; font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
+    margin: 0 0 12px; font-size: 24px; font-weight: 700; letter-spacing: -0.01em;
+    color: #f1f5fa;
   }
   .header .meta {
-    font-size: 13px; opacity: .92; display: flex; flex-wrap: wrap; gap: 18px;
+    font-size: 12.5px; color: #a9bcd4; display: flex; flex-wrap: wrap; gap: 22px;
   }
-  .header .meta span strong { font-weight: 700; }
+  .header .meta span strong { font-weight: 600; color: #e6edf7; margin-left: 4px; }
+  .header .meta .lbl { color: #6c82a1; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.1em; }
 
-  .ac-pills { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .ac-pills { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
   .ac-pills .pill {
-    background: rgba(255,255,255,.14); color: #fff;
-    border: 1px solid rgba(255,255,255,.25);
-    padding: 4px 12px; border-radius: 999px;
-    font-size: 12px; font-weight: 600;
+    background: rgba(255,255,255,.06); color: #cfdbeb;
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 3px 10px; border-radius: 4px;
+    font-size: 11.5px; font-weight: 500;
   }
 
   /* ─── Controls bar ─── */
@@ -117,19 +119,18 @@
 
   /* ─── Exec summary (floating card) ─── */
   .exec-band {
-    background: #fff; border: 1px solid var(--border); border-radius: 14px;
-    padding: 18px 24px; margin: -40px 0 24px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 22px; margin: -28px 0 22px;
     box-shadow: var(--shadow); position: relative; z-index: 2;
-    display: flex; align-items: center; gap: 14px;
+    display: flex; align-items: flex-start; gap: 16px;
+    border-left: 3px solid var(--accent);
   }
   .exec-band .badge {
-    background: linear-gradient(135deg, #2E86AB, #3fa7c4);
-    color: #fff; font-size: 11px; font-weight: 700; padding: 5px 10px;
-    border-radius: 999px; letter-spacing: .08em; text-transform: uppercase;
-    flex-shrink: 0;
+    color: var(--muted); font-size: 10.5px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; flex-shrink: 0; padding-top: 2px; min-width: 60px;
   }
   .exec-band #exec-text {
-    font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.5;
+    font-size: 14.5px; font-weight: 500; color: var(--ink); line-height: 1.55;
   }
 
   /* ─── KPI grid ─── */
@@ -213,18 +214,19 @@
 
   /* ─── Insights panel ─── */
   .insights {
-    background: #fff9ea; border: 1px solid #f0dba5; border-radius: 14px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
     padding: 20px 24px; margin: 16px 0; box-shadow: var(--shadow);
+    border-top: 2px solid var(--accent);
   }
   .insights h3 {
-    margin: 0 0 12px; font-size: 15px; font-weight: 700; color: #7a5d1d;
-    display: flex; align-items: center; gap: 8px;
+    margin: 0 0 14px; font-size: 13px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.12em;
   }
-  .insights ul { margin: 0; padding-left: 20px; }
+  .insights ul { margin: 0; padding-left: 18px; }
   .insights li {
-    font-size: 13.5px; line-height: 1.65; color: #3f2f0f; margin-bottom: 4px;
+    font-size: 13.5px; line-height: 1.7; color: var(--ink); margin-bottom: 6px;
   }
-  .insights li b { color: var(--ink); }
+  .insights li b { color: var(--ink); font-weight: 700; }
 
   /* ─── Footer ─── */
   footer {
@@ -237,14 +239,9 @@
 
   /* ─── Dark-mode overrides for elements with hardcoded light colors ─── */
   html[data-theme="dark"] #stress-table th { background: #0a1426; color: var(--ink); }
-  html[data-theme="dark"] .insights {
-    background: rgba(244, 180, 80, 0.08); border-color: rgba(244, 180, 80, 0.3);
-  }
-  html[data-theme="dark"] .insights h3 { color: #f4d27a; }
-  html[data-theme="dark"] .insights li { color: #e6edf7; }
-  html[data-theme="dark"] .insights li b { color: #fff; }
-  html[data-theme="dark"] .exec-band { background: #141f36; border-color: #2a3a5a; }
+  html[data-theme="dark"] .controls button.ghost:hover { background: #1a2744; }
   html[data-theme="dark"] footer code { background: #1a2744; color: var(--muted); }
+  html[data-theme="dark"] .kpi-tooltip { background: #050b1a; border: 1px solid #2a3a5a; }
 
   /* ─── Toast ─── */
   #toast-root {
@@ -312,14 +309,14 @@
 <body>
 
 <header class="header">
-  <div class="brand">Investment Analytics · Skills-driven Dashboard</div>
+  <div class="brand">Investment Analytics</div>
   <h1 id="header-title">Portfolio Performance &amp; Risk Review</h1>
   <div class="meta">
-    <span>📅 <strong id="period">—</strong></span>
-    <span>📊 거래일 <strong id="tdays">—</strong>일</span>
-    <span>🎯 벤치 <strong id="bench">—</strong></span>
-    <span>📦 포지션 <strong id="nposition">—</strong></span>
-    <span>⏱ 생성 <strong id="gentime">—</strong></span>
+    <span><span class="lbl">Period</span><strong id="period">—</strong></span>
+    <span><span class="lbl">Trading Days</span><strong id="tdays">—</strong></span>
+    <span><span class="lbl">Benchmark</span><strong id="bench">—</strong></span>
+    <span><span class="lbl">Positions</span><strong id="nposition">—</strong></span>
+    <span><span class="lbl">Generated</span><strong id="gentime">—</strong></span>
   </div>
   <div class="ac-pills" id="ac-pills"></div>
 </header>
@@ -328,7 +325,7 @@
 
   <!-- Executive Summary (overlaps header) -->
   <section class="exec-band">
-    <div class="badge">Executive</div>
+    <div class="badge">Summary</div>
     <div id="exec-text">데이터를 로드하는 중…</div>
   </section>
 
@@ -364,22 +361,22 @@
       <input type="number" id="rf-input" value="0.035" step="0.005" min="0" max="0.2" style="width:72px" title="연 무위험 수익률 (기본 3.5%). 변경 시 자동 재계산" />
       <button id="btn-rf-apply" class="ghost">적용</button>
       <div class="divider"></div>
-      <button id="btn-download-json" class="ghost" title="현재 KPI를 JSON으로 저장">⬇ JSON</button>
-      <button id="btn-download-md" class="ghost" title="사람이 읽는 마크다운 리포트">⬇ Report.md</button>
-      <button id="btn-template" class="ghost" title="입력 데이터 템플릿 (prices.csv · holdings.json) 다운로드">⬇ 템플릿</button>
-      <button id="btn-print" class="ghost" title="브라우저 인쇄 대화창 → PDF로 저장 (P)">🖨 PDF</button>
-      <button id="btn-theme" class="ghost" title="다크 모드 토글 (D)">🌙 Dark</button>
+      <button id="btn-download-json" class="ghost" title="현재 KPI를 JSON으로 저장">JSON</button>
+      <button id="btn-download-md" class="ghost" title="사람이 읽는 마크다운 리포트">Report.md</button>
+      <button id="btn-template" class="ghost" title="입력 데이터 템플릿 (prices.csv · holdings.json) 다운로드">템플릿</button>
+      <button id="btn-print" class="ghost" title="브라우저 인쇄 대화창 → PDF로 저장 (P)">PDF</button>
+      <button id="btn-theme" class="ghost" title="다크 모드 토글 (D)">Dark</button>
     </div>
   </section>
 
   <!-- Portfolio name + session status -->
   <section class="controls" style="margin-top: -10px;">
     <div class="group">
-      <label>📝 포트폴리오 명</label>
+      <label>포트폴리오 명</label>
       <input type="text" id="portfolio-name" placeholder="예: 2026 글로벌 코어" title="헤더와 리포트에 반영됩니다" style="min-width:220px" />
       <button id="btn-pname-apply" class="ghost">반영</button>
       <div class="divider"></div>
-      <button id="btn-reset-session" class="ghost" title="저장된 세션 설정 초기화 (벤치/Rf/테마/포트명/기간 등)">↺ 세션 초기화</button>
+      <button id="btn-reset-session" class="ghost" title="저장된 세션 설정 초기화 (벤치/Rf/테마/포트명/기간 등)">세션 초기화</button>
       <span class="status" id="session-status"></span>
     </div>
   </section>
@@ -387,16 +384,16 @@
   <!-- Date range filter -->
   <section class="controls" style="margin-top: -10px;">
     <div class="group">
-      <label>📅 분석 기간</label>
+      <label>분석 기간</label>
       <input type="date" id="date-from" />
-      <span style="color:#64748b">~</span>
+      <span style="color:var(--muted)">—</span>
       <input type="date" id="date-to" />
       <button id="btn-date-apply">적용</button>
       <button id="btn-date-reset" class="ghost">전체 기간</button>
       <span class="status" id="date-status"></span>
     </div>
-    <div class="group" style="margin-left:auto; font-size:11.5px; color:#64748b;">
-      💡 차트 ①의 range selector로도 줌 가능
+    <div class="group" style="margin-left:auto; font-size:11.5px; color:var(--muted);">
+      차트 ①의 range selector 로도 줌 가능
     </div>
   </section>
 
@@ -407,12 +404,12 @@
   <section class="row row-2-wide">
     <div class="card">
       <h3>① 누적 수익률 — 포트 vs 벤치</h3>
-      <div class="caption">전체 기간 성과 비교 · 호버로 값 확인, 범례 클릭 시 계열 토글</div>
+      <div class="caption">포트 vs 벤치 누적 성과. 호버·범례 토글 지원.</div>
       <div class="fig fig-tall" id="fig-cumulative"></div>
     </div>
     <div class="card">
       <h3>② 월별 수익률 히트맵</h3>
-      <div class="caption">연·월별 수익률 분포 — 계절성·국면 감지</div>
+      <div class="caption">연·월별 수익률 매트릭스.</div>
       <div class="fig fig-tall" id="fig-heatmap"></div>
     </div>
   </section>
@@ -421,12 +418,12 @@
   <section class="row row-2">
     <div class="card">
       <h3>③ Underwater (낙폭) — 포트 vs 벤치</h3>
-      <div class="caption">고점 대비 낙폭의 시간적 전개 · 회복 시간 비교</div>
+      <div class="caption">고점 대비 낙폭 추이.</div>
       <div class="fig fig-tall" id="fig-underwater"></div>
     </div>
     <div class="card">
       <h3>④ 일간 수익률 분포 + VaR/CVaR</h3>
-      <div class="caption">포트 일간 수익률 히스토그램 · 95% VaR / CVaR 선 표시</div>
+      <div class="caption">일간 수익률 히스토그램. 95% VaR·CVaR 표시.</div>
       <div class="fig fig-tall" id="fig-distribution"></div>
     </div>
   </section>
@@ -435,12 +432,12 @@
   <section class="row row-2b">
     <div class="card">
       <h3>⑤ 롤링 Sharpe & Beta (63영업일)</h3>
-      <div class="caption">시간에 따른 위험조정 수익 효율 · 벤치 민감도 변동</div>
+      <div class="caption">63영업일 롤링 윈도우. 위험조정 수익·벤치 민감도.</div>
       <div class="fig" id="fig-rolling-sb"></div>
     </div>
     <div class="card">
       <h3>⑥ 60일 이동 연환산 변동성</h3>
-      <div class="caption">변동성 국면 감지 — 상승 구간은 리스크 누적 국면</div>
+      <div class="caption">60일 이동 연환산 변동성.</div>
       <div class="fig" id="fig-rolling-vol"></div>
     </div>
   </section>
@@ -449,12 +446,12 @@
   <section class="row row-2">
     <div class="card">
       <h3>⑦ 스트레스 시나리오 바</h3>
-      <div class="caption">과거·가정 시나리오 하 1일 포트 손익 — 양·음 방향 비교</div>
+      <div class="caption">시나리오 가정 시 1일 포트 손익.</div>
       <div class="fig fig-tall" id="fig-stress"></div>
     </div>
     <div class="card">
       <h3>스트레스 상세</h3>
-      <div class="caption">시나리오별 1일 손익 · 기여 섹터/자산군</div>
+      <div class="caption">시나리오별 수치 일람.</div>
       <table id="stress-table">
         <thead>
           <tr><th>시나리오</th><th style="text-align:right">1일 포트 손익</th></tr>
@@ -475,12 +472,12 @@
           <option value="15">Top 15</option>
         </select>
       </h3>
-      <div class="caption">분산 효과 검증 — 과상관 구간은 분산 효과 제한적</div>
+      <div class="caption">상위 보유 종목 간 상관 행렬.</div>
       <div class="fig fig-tall" id="fig-correlation"></div>
     </div>
     <div class="card">
       <h3>⑨ 자산군 비중</h3>
-      <div class="caption">Equity / Bond / Commodity / RealEstate / Cash 균형</div>
+      <div class="caption">자산군별 배분.</div>
       <div class="fig fig-tall" id="fig-asset-class"></div>
     </div>
   </section>
@@ -489,31 +486,30 @@
   <section class="row row-3">
     <div class="card">
       <h3>⑩ 섹터 비중 도넛</h3>
-      <div class="caption">섹터 편중 관찰 — 상위 섹터 집중도</div>
+      <div class="caption">섹터별 비중 분포.</div>
       <div class="fig" id="fig-sector"></div>
     </div>
     <div class="card">
       <h3>⑪ 지역 × 섹터 Treemap</h3>
-      <div class="caption">지역·섹터·종목 3단 계층 구조</div>
+      <div class="caption">지역 → 섹터 → 종목 3단 계층.</div>
       <div class="fig" id="fig-region"></div>
     </div>
     <div class="card">
       <h3>⑫ Top 10 종목</h3>
-      <div class="caption">종목 집중도 상위 — HHI 진단 보조</div>
+      <div class="caption">비중 상위 종목. 호버 시 전체 이름.</div>
       <div class="fig" id="fig-top-holdings"></div>
     </div>
   </section>
 
   <!-- Insights -->
   <section class="insights" id="insights">
-    <h3>💡 핵심 인사이트 · 리스크 플래그 · 실행 제안</h3>
+    <h3>핵심 인사이트 · 리스크 플래그 · 실행 제안</h3>
     <ul></ul>
   </section>
 
   <footer>
     Investment Skills Dashboard · v1.0 ·
-    <code>Skills.md</code>-driven · Client-side (Plotly + PapaParse) ·
-    GitHub Pages deployable
+    <code>Skills.md</code>-driven · Client-side (Plotly + PapaParse)
   </footer>
 </main>
 

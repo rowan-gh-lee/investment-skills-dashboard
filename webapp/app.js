@@ -483,40 +483,40 @@ function buildInsights(summary, holdings, benchmark) {
   if (b) {
     const diff = p.cagr - b.cagr;
     const dir = diff >= 0 ? "상회" : "하회";
-    out.push(`📈 <b>성과</b>: CAGR ${fmtPct(p.cagr)} 로 벤치마크 ${benchmark} (${fmtPct(b.cagr)}) 대비 ${(Math.abs(diff) * 100).toFixed(2)}%p ${dir}. β ${fmtRatio(b.beta)} · α ${fmtPct(b.alpha)} · IR ${fmtRatio(b.information_ratio)}.`);
+    out.push(`<b>성과</b> — CAGR ${fmtPct(p.cagr)} 로 벤치마크 ${benchmark} (${fmtPct(b.cagr)}) 대비 ${(Math.abs(diff) * 100).toFixed(2)}%p ${dir}. β ${fmtRatio(b.beta)} · α ${fmtPct(b.alpha)} · IR ${fmtRatio(b.information_ratio)}.`);
   } else {
-    out.push(`📈 <b>성과</b>: CAGR ${fmtPct(p.cagr)}, 연환산 변동성 ${fmtPct(p.ann_vol, 2, false)}.`);
+    out.push(`<b>성과</b> — CAGR ${fmtPct(p.cagr)} · 연환산 변동성 ${fmtPct(p.ann_vol, 2, false)}.`);
   }
-  out.push(`🛡 <b>리스크</b>: MDD ${fmtPct(p.mdd)} (${p.mdd_peak} → ${p.mdd_trough}) · Calmar ${fmtRatio(p.calmar)} · Sharpe ${fmtRatio(p.sharpe)} / Sortino ${fmtRatio(p.sortino)} · VaR95 ${(p.var_95 * 100).toFixed(2)}% / CVaR95 ${(p.cvar_95 * 100).toFixed(2)}%.`);
+  out.push(`<b>리스크</b> — MDD ${fmtPct(p.mdd)} (${p.mdd_peak} → ${p.mdd_trough}) · Calmar ${fmtRatio(p.calmar)} · Sharpe ${fmtRatio(p.sharpe)} / Sortino ${fmtRatio(p.sortino)} · VaR95 ${(p.var_95 * 100).toFixed(2)}% / CVaR95 ${(p.cvar_95 * 100).toFixed(2)}%.`);
 
   const top = [...holdings].sort((a, b) => b.weight - a.weight)[0];
   const sectorAgg = summary.composition.by_sector;
   const topSector = Object.entries(sectorAgg).sort((a, b) => b[1] - a[1])[0];
-  out.push(`🧩 <b>구성</b>: HHI ${p.hhi.toFixed(3)} · 최대 비중 종목 ${top.ticker} (${(top.weight * 100).toFixed(1)}%) · 1위 섹터 ${topSector[0]} ${(topSector[1] * 100).toFixed(1)}%.`);
+  out.push(`<b>구성</b> — HHI ${p.hhi.toFixed(3)} · 최대 비중 ${top.ticker} (${(top.weight * 100).toFixed(1)}%) · 1위 섹터 ${topSector[0]} ${(topSector[1] * 100).toFixed(1)}%.`);
 
   if (summary.stress?.length) {
     const worst = summary.stress.reduce((w, s) => s.pnl_pct < w.pnl_pct ? s : w, summary.stress[0]);
-    out.push(`🌪 <b>스트레스 최악</b>: '${worst.scenario}' 적용 시 1일 포트 ${fmtPct(worst.pnl_pct)} — 대비 자산(금/국채/현금) 비중 점검.`);
+    out.push(`<b>스트레스 최악</b> — '${worst.scenario}' 적용 시 1일 포트 ${fmtPct(worst.pnl_pct)}. 대비 자산(금/국채/현금) 비중 점검.`);
   }
 
   // Flags
-  if (p.mdd < -0.20) out.push("⚠︎ MDD 20% 초과 — 꼬리위험 헤지 또는 현금비중 재검토 권장.");
-  if (p.sharpe != null && !Number.isNaN(p.sharpe) && p.sharpe < 0.5) out.push("⚠︎ Sharpe 0.5 미만 — 위험 대비 수익 효율이 낮음. 종목/섹터 선택 재검토.");
-  if (p.hhi > 0.15) out.push("⚠︎ HHI 0.15 초과 — 상위 몇 종목이 전체 리스크를 좌우하는 구조.");
-  if (b && p.ann_vol > 1.3 * b.ann_vol) out.push("⚠︎ 포트 변동성이 벤치 대비 30% 이상 — 저베타 자산 편입 검토.");
-  if (b && b.up_capture_daily < 0.45) out.push("⚠︎ 일간 상승 포착률 45% 미만 — 벤치 대비 강세장에서 뒤처짐.");
+  if (p.mdd < -0.20) out.push("<b>주의</b> — MDD 20% 초과. 꼬리위험 헤지 또는 현금비중 재검토 권장.");
+  if (p.sharpe != null && !Number.isNaN(p.sharpe) && p.sharpe < 0.5) out.push("<b>주의</b> — Sharpe 0.5 미만. 위험 대비 수익 효율이 낮음. 종목/섹터 선택 재검토.");
+  if (p.hhi > 0.15) out.push("<b>주의</b> — HHI 0.15 초과. 상위 몇 종목이 전체 리스크를 좌우하는 구조.");
+  if (b && p.ann_vol > 1.3 * b.ann_vol) out.push("<b>주의</b> — 포트 변동성이 벤치 대비 30% 이상. 저베타 자산 편입 검토.");
+  if (b && b.up_capture_daily < 0.45) out.push("<b>주의</b> — 일간 상승 포착률 45% 미만. 벤치 대비 강세장에서 뒤처짐.");
   // Mixed-currency check (from 02_data_schema.md)
   const currs = [...new Set(holdings.map(h => h.currency).filter(Boolean))];
   if (currs.length > 1) {
-    out.push(`⚠︎ 통화 혼재(${currs.join(", ")}) — 기준통화(USD) 환산 전제 사용 중. 정확한 KPI 산출 위해 FX 환율 오버라이드 권장.`);
+    out.push(`<b>주의</b> — 통화 혼재(${currs.join(", ")}). 기준통화(USD) 환산 전제 사용 중. 정확한 KPI 산출 위해 FX 환율 오버라이드 권장.`);
   }
 
   // Actions
   const actions = [];
-  if (p.mdd < -0.20) actions.push("✅ 하방 헤지 — 풋옵션 혹은 역상관 자산(미국채/금) 5~10% 편입.");
-  if (p.hhi > 0.15) actions.push("✅ 집중도 완화 — 상위 2개 종목 비중 각 2%p 하향 → 동종 ETF로 대체.");
-  if (b && p.ann_vol > 1.3 * b.ann_vol) actions.push("✅ 변동성 축소 — 필수소비재/헬스케어 저베타 섹터 가점.");
-  if (!actions.length) actions.push("✅ 현 구성 유지 — 지표가 균형 범위. 분기 리밸런싱(±2%p 이탈 시)만 유지.");
+  if (p.mdd < -0.20) actions.push("<b>제안</b> — 하방 헤지: 풋옵션 혹은 역상관 자산(미국채/금) 5~10% 편입.");
+  if (p.hhi > 0.15) actions.push("<b>제안</b> — 집중도 완화: 상위 2개 종목 비중 각 2%p 하향 → 동종 ETF로 대체.");
+  if (b && p.ann_vol > 1.3 * b.ann_vol) actions.push("<b>제안</b> — 변동성 축소: 필수소비재/헬스케어 저베타 섹터 가점.");
+  if (!actions.length) actions.push("<b>제안</b> — 현 구성 유지: 지표가 균형 범위. 분기 리밸런싱(±2%p 이탈 시)만 유지.");
   out.push(...actions);
   return out;
 }
@@ -526,15 +526,36 @@ const COL_PORT = "#2E86AB", COL_BENCH = "#E63946", COL_POS = "#2A9D8F",
       COL_NEG = "#E76F51", COL_ACCENT = "#F4A261", COL_NEUTRAL = "#6C757D";
 const FONT = "Pretendard Variable, Pretendard, -apple-system, 'Noto Sans KR', sans-serif";
 
-const baseLayout = (title, h = 360) => ({
-  title: { text: title, x: 0.01, xanchor: "left", font: { size: 14, color: "#0f172a" } },
-  margin: { l: 50, r: 20, t: 44, b: 40 },
-  height: h,
-  font: { family: FONT, size: 12, color: "#222" },
-  plot_bgcolor: "white", paper_bgcolor: "white",
-  hovermode: "x unified",
-  legend: { orientation: "h", yanchor: "bottom", y: 1.02, xanchor: "right", x: 1, bgcolor: "rgba(255,255,255,0)" },
-});
+// Theme-aware color palette — re-evaluated at render time so charts update when user toggles dark.
+function themeColors() {
+  const dark = document.documentElement.dataset.theme === "dark";
+  return dark ? {
+    ink: "#e6edf7", muted: "#8ea0b5", grid: "#2a3a5a",
+    titleFill: "#e6edf7", zeroline: "#5b6c86",
+    annBg: "#141f36", annBorder: "#2a3a5a",
+    selectorBg: "#1a2744", sliderBg: "#0b1220",
+  } : {
+    ink: "#0f172a", muted: "#64748b", grid: "#eef2f6",
+    titleFill: "#0f172a", zeroline: "#9aa6b2",
+    annBg: "#ffffff", annBorder: "#d7dde6",
+    selectorBg: "#f4f6fb", sliderBg: "#f4f6fb",
+  };
+}
+
+const baseLayout = (title, h = 360) => {
+  const c = themeColors();
+  return {
+    title: { text: title, x: 0.01, xanchor: "left", font: { size: 14, color: c.titleFill } },
+    margin: { l: 50, r: 20, t: 44, b: 40 },
+    height: h,
+    font: { family: FONT, size: 12, color: c.ink },
+    plot_bgcolor: "rgba(0,0,0,0)", paper_bgcolor: "rgba(0,0,0,0)",
+    hovermode: "x unified",
+    legend: { orientation: "h", yanchor: "bottom", y: 1.02, xanchor: "right", x: 1,
+              bgcolor: "rgba(0,0,0,0)", font: { color: c.ink } },
+    _c: c, // attach for downstream consumers
+  };
+};
 
 function drawCumulative(el, summary, benchmark) {
   const { rDates, pCum, bCum } = summary._arrays;
@@ -549,7 +570,7 @@ function drawCumulative(el, summary, benchmark) {
     hovertemplate: `%{x|%Y-%m-%d}<br>${benchmark} %{y:.2f}%<extra></extra>`,
   });
   const lay = baseLayout("누적 수익률 (%)");
-  lay.xaxis = { showgrid: true, gridcolor: "#eee",
+  lay.xaxis = { showgrid: true, gridcolor: lay._c.grid,
                 rangeselector: {
                   buttons: [
                     { count: 3, label: "3M", step: "month", stepmode: "backward" },
@@ -558,10 +579,10 @@ function drawCumulative(el, summary, benchmark) {
                     { count: 3, label: "3Y", step: "year", stepmode: "backward" },
                     { step: "all", label: "전체" },
                   ],
-                  bgcolor: "#f4f6fb", activecolor: "#2E86AB", font: { size: 11 }, y: 1.08,
+                  bgcolor: lay._c.selectorBg, activecolor: "#2E86AB", font: { size: 11, color: lay._c.ink }, y: 1.08,
                 },
-                rangeslider: { visible: true, thickness: 0.05, bgcolor: "#f4f6fb" } };
-  lay.yaxis = { showgrid: true, gridcolor: "#eee", ticksuffix: "%" };
+                rangeslider: { visible: true, thickness: 0.05, bgcolor: lay._c.sliderBg } };
+  lay.yaxis = { showgrid: true, gridcolor: lay._c.grid, ticksuffix: "%" };
   // MDD peak → trough annotation
   const p = summary.portfolio;
   if (p.mdd_peak && p.mdd_trough) {
@@ -580,10 +601,10 @@ function drawCumulative(el, summary, benchmark) {
     lay.annotations = [
       { x: p.mdd_peak, y: peakY, text: `MDD 시작<br>${p.mdd_peak}`, showarrow: true,
         arrowhead: 2, arrowcolor: COL_NEG, ax: -40, ay: -30,
-        font: { size: 10, color: COL_NEG }, bgcolor: "#fff", bordercolor: COL_NEG, borderwidth: 1 },
+        font: { size: 10, color: COL_NEG }, bgcolor: lay._c.annBg, bordercolor: COL_NEG, borderwidth: 1 },
       { x: p.mdd_trough, y: troughY, text: `MDD ${(p.mdd * 100).toFixed(1)}%<br>${p.mdd_trough}`, showarrow: true,
         arrowhead: 2, arrowcolor: COL_NEG, ax: 40, ay: 30,
-        font: { size: 10, color: COL_NEG }, bgcolor: "#fff", bordercolor: COL_NEG, borderwidth: 1 },
+        font: { size: 10, color: COL_NEG }, bgcolor: lay._c.annBg, bordercolor: COL_NEG, borderwidth: 1 },
     ];
   }
   Plotly.react(el, traces, lay, plotConfig());
@@ -608,7 +629,7 @@ function drawMonthlyHeatmap(el, summary) {
   Plotly.react(el, [{
     type: "heatmap", z, x: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
     y: years.map(String),
-    colorscale: [[0, COL_NEG], [0.5, "#FFFFFF"], [1, COL_POS]], zmid: 0,
+    colorscale: [[0, COL_NEG], [0.5, lay._c.annBg === "#ffffff" ? "#FFFFFF" : "#14213d"], [1, COL_POS]], zmid: 0,
     text, texttemplate: "%{text}",
     hovertemplate: "%{y}년 %{x}<br>월수익률 %{z:.2f}%<extra></extra>",
     colorbar: { title: "%", thickness: 10 },
@@ -630,8 +651,8 @@ function drawUnderwater(el, summary, benchmark) {
                           line: { color: COL_BENCH, width: 1.4, dash: "dot" },
                           hovertemplate: `%{x|%Y-%m-%d}<br>${benchmark} DD %{y:.2f}%<extra></extra>` });
   const lay = baseLayout("포트 vs 벤치 Underwater Curve");
-  lay.xaxis = { showgrid: true, gridcolor: "#eee" };
-  lay.yaxis = { showgrid: true, gridcolor: "#eee", ticksuffix: "%" };
+  lay.xaxis = { showgrid: true, gridcolor: lay._c.grid };
+  lay.yaxis = { showgrid: true, gridcolor: lay._c.grid, ticksuffix: "%" };
   Plotly.react(el, traces, lay, plotConfig());
 }
 
@@ -642,8 +663,8 @@ function drawDistribution(el, summary) {
   const cvar95 = -summary.portfolio.cvar_95 * 100;
   const m = mean(pct);
   const lay = baseLayout("일간 수익률 분포 · VaR/CVaR");
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: "#eee" };
-  lay.yaxis = { showgrid: true, gridcolor: "#eee" };
+  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid };
+  lay.yaxis = { showgrid: true, gridcolor: lay._c.grid };
   lay.shapes = [
     { type: "line", x0: m, x1: m, y0: 0, y1: 1, yref: "paper",
       line: { color: COL_ACCENT, dash: "dash" } },
@@ -652,14 +673,18 @@ function drawDistribution(el, summary) {
     { type: "line", x0: cvar95, x1: cvar95, y0: 0, y1: 1, yref: "paper",
       line: { color: "#7b1d1d" } },
   ];
+  const isDark = lay._c.ink !== "#0f172a";
   lay.annotations = [
-    { x: m, y: 1, yref: "paper", text: `평균 ${m.toFixed(2)}%`, showarrow: false, yshift: 10 },
-    { x: var95, y: 0.08, yref: "paper", text: `VaR 95% ${var95.toFixed(2)}%`, showarrow: false, bgcolor: "#ffe6e0" },
-    { x: cvar95, y: 0.18, yref: "paper", text: `CVaR 95% ${cvar95.toFixed(2)}%`, showarrow: false, bgcolor: "#ffd8cc" },
+    { x: m, y: 1, yref: "paper", text: `평균 ${m.toFixed(2)}%`, showarrow: false, yshift: 10,
+      font: { color: lay._c.ink } },
+    { x: var95, y: 0.08, yref: "paper", text: `VaR 95% ${var95.toFixed(2)}%`, showarrow: false,
+      bgcolor: isDark ? "rgba(231,111,81,0.22)" : "#ffe6e0", font: { color: lay._c.ink } },
+    { x: cvar95, y: 0.18, yref: "paper", text: `CVaR 95% ${cvar95.toFixed(2)}%`, showarrow: false,
+      bgcolor: isDark ? "rgba(190,60,60,0.28)" : "#ffd8cc", font: { color: lay._c.ink } },
   ];
   Plotly.react(el, [{
     type: "histogram", x: pct, nbinsx: 50,
-    marker: { color: COL_PORT, line: { color: "white", width: 0.5 } },
+    marker: { color: COL_PORT, line: { color: lay._c.annBg, width: 0.5 } },
     hovertemplate: "구간 %{x:.2f}%<br>빈도 %{y}<extra></extra>",
     name: "일간수익률",
   }], lay, plotConfig());
@@ -685,11 +710,11 @@ function drawRollingSB(el, summary, benchmark) {
     });
   }
   const lay = baseLayout(`롤링 Sharpe & Beta (${w}일)`);
-  lay.yaxis = { title: "Sharpe", showgrid: true, gridcolor: "#eee" };
+  lay.yaxis = { title: "Sharpe", showgrid: true, gridcolor: lay._c.grid };
   lay.yaxis2 = { title: "Beta", overlaying: "y", side: "right", showgrid: false };
-  lay.xaxis = { showgrid: true, gridcolor: "#eee" };
+  lay.xaxis = { showgrid: true, gridcolor: lay._c.grid };
   lay.shapes = [{ type: "line", x0: rDates[0], x1: rDates[rDates.length-1], y0:0, y1:0,
-                  line: { color: "#cccccc", dash: "dash" } }];
+                  line: { color: lay._c.zeroline, dash: "dash" } }];
   Plotly.react(el, traces, lay, plotConfig());
 }
 
@@ -698,8 +723,8 @@ function drawRollingVol(el, summary) {
   const w = 60;
   const sd = rollingStd(pRet, w).map(v => Number.isFinite(v) ? v * Math.sqrt(TRADING_DAYS) * 100 : NaN);
   const lay = baseLayout(`${w}일 이동 연환산 변동성`);
-  lay.xaxis = { showgrid: true, gridcolor: "#eee" };
-  lay.yaxis = { ticksuffix: "%", showgrid: true, gridcolor: "#eee" };
+  lay.xaxis = { showgrid: true, gridcolor: lay._c.grid };
+  lay.yaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid };
   Plotly.react(el, [{
     x: rDates, y: sd, mode: "lines", name: `${w}d`,
     line: { color: COL_ACCENT, width: 2 },
@@ -713,7 +738,7 @@ function drawStress(el, summary) {
   const vals = st.map(s => s.pnl_pct * 100);
   const colors = vals.map(v => v >= 0 ? COL_POS : COL_NEG);
   const lay = baseLayout("스트레스 시나리오별 1일 포트 손익");
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: "#eee", zeroline: true, zerolinecolor: "#999" };
+  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid, zeroline: true, zerolinecolor: lay._c.zeroline };
   lay.yaxis = { showgrid: false };
   Plotly.react(el, [{
     type: "bar", orientation: "h", x: vals, y: names,
@@ -741,7 +766,7 @@ function drawCorrelation(el, priceData, holdings, topN = 8) {
   const lay = baseLayout("종목 간 일간수익률 상관관계");
   Plotly.react(el, [{
     type: "heatmap", z: corr, x: topTickers, y: topTickers,
-    colorscale: [[0, "#1D3557"], [0.5, "#FFFFFF"], [1, "#E63946"]], zmid: 0, zmin: -1, zmax: 1,
+    colorscale: [[0, "#1D3557"], [0.5, lay._c.ink === "#0f172a" ? "#FFFFFF" : "#1a2744"], [1, "#E63946"]], zmid: 0, zmin: -1, zmax: 1,
     text, texttemplate: "%{text}", textfont: { size: 10 },
     hovertemplate: "%{y} · %{x}<br>상관계수 %{z:.3f}<extra></extra>",
     colorbar: { thickness: 10 },
@@ -752,7 +777,7 @@ function drawAssetClassBar(el, summary) {
   const a = Object.entries(summary.composition.by_asset_class).sort((x, y) => x[1] - y[1]);
   const colors = [COL_PORT, COL_ACCENT, COL_NEUTRAL, COL_POS, COL_BENCH];
   const lay = baseLayout("자산군 비중");
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: "#eee" };
+  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid };
   lay.yaxis = { showgrid: false };
   Plotly.react(el, [{
     type: "bar", orientation: "h",
@@ -807,22 +832,28 @@ function drawRegionTreemap(el, holdings) {
     textinfo: "label+value", customdata,
     hovertemplate: "%{label}<br>비중 %{value:.2f}%<br>%{customdata}<extra></extra>",
     marker: { colorscale: "Blues" },
-    root: { color: "#ffffff" },
+    root: { color: lay._c.ink === "#0f172a" ? "#ffffff" : "#0b1220" },
   }], lay, plotConfig());
 }
 
 function drawTopHoldings(el, holdings, n = 10) {
   const sorted = [...holdings].sort((a, b) => a.weight - b.weight).slice(-n);
   const lay = baseLayout(`Top ${n} 비중 종목`);
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: "#eee" };
-  lay.yaxis = { showgrid: false };
+  // Reserve a fixed-width left gutter for ticker labels; automargin ensures nothing clips.
+  lay.margin = { l: 76, r: 48, t: 44, b: 40 };
+  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid };
+  lay.yaxis = {
+    showgrid: false, automargin: true,
+    tickfont: { size: 12, color: lay._c.ink, family: FONT },
+  };
   Plotly.react(el, [{
     type: "bar", orientation: "h",
     x: sorted.map(h => h.weight * 100),
-    y: sorted.map(h => `${h.ticker} · ${h.name}`),
+    y: sorted.map(h => h.ticker),                       // short, fully visible
+    customdata: sorted.map(h => h.name || ""),          // full name in hover
     marker: { color: COL_PORT },
     text: sorted.map(h => `${(h.weight * 100).toFixed(2)}%`), textposition: "outside",
-    hovertemplate: "%{y}<br>비중 %{x:.2f}%<extra></extra>",
+    hovertemplate: "<b>%{y}</b> · %{customdata}<br>비중 %{x:.2f}%<extra></extra>",
   }], lay, plotConfig());
 }
 
@@ -896,7 +927,7 @@ function renderInsights(insights) {
 function renderStressTable(summary) {
   const rows = summary.stress.map(s => {
     const cls = s.pnl_pct < 0 ? "neg" : "pos";
-    return `<tr><td>${s.scenario}</td><td class="${cls}">${fmtPct(s.pnl_pct)}</td></tr>`;
+    return `<tr><td>${s.scenario}</td><td class="num ${cls}">${fmtPct(s.pnl_pct)}</td></tr>`;
   }).join("");
   qs("#stress-table tbody").innerHTML = rows;
 }
@@ -952,26 +983,20 @@ async function maybeFxConvert(priceData, holdings, base = "USD") {
   if (!foreign.length) return { priceData, note: "" };
   const fxRates = await fetchFxRates();
   if (!fxRates) {
-    return { priceData, note: `⚠︎ 통화 혼재(${ccys.join(", ")}) · fx_rates.json 없음 — 로컬 통화 그대로 계산 중` };
+    return { priceData, note: `통화 혼재 (${ccys.join(", ")}) · fx_rates.json 없음 · 로컬 통화 그대로 계산 중` };
   }
   const missing = foreign.filter(c => fxRates[c] == null);
   const converted = convertPricesToBase(priceData, holdings, fxRates, base);
   const note = missing.length
-    ? `ℹ︎ FX 변환 적용 (기준 ${base}) · 누락 환율: ${missing.join(", ")}`
-    : `ℹ︎ FX 변환 적용 (기준 ${base}, as_of ${fxRates._as_of || "fx_rates.json"})`;
+    ? `FX 변환 적용 (기준 ${base}) · 누락 환율: ${missing.join(", ")}`
+    : `FX 변환 적용 (기준 ${base}, as_of ${fxRates._as_of || "fx_rates.json"})`;
   return { priceData: converted, note };
 }
 
-async function render({ priceData, holdings, benchmark, rf, portfolioName }) {
-  const rfUsed = rf ?? DEFAULT_RF;
-  const summary = computeAll(priceData, holdings, benchmark, rfUsed);
-  const insights = buildInsights(summary, holdings, benchmark);
-
-  renderHeader(summary, benchmark, portfolioName);
-  renderKPIs(summary, benchmark, rfUsed);
-  renderStressTable(summary);
-  renderInsights(insights);
-
+// Redraws just the Plotly charts — used by the dark-mode toggle so axes/text/grid
+// pick up the new theme without recomputing KPIs or insights.
+function renderAllCharts(ctx) {
+  const { priceData, holdings, benchmark, summary } = ctx;
   drawCumulative(qs("#fig-cumulative"), summary, benchmark);
   drawMonthlyHeatmap(qs("#fig-heatmap"), summary);
   drawUnderwater(qs("#fig-underwater"), summary, benchmark);
@@ -985,10 +1010,24 @@ async function render({ priceData, holdings, benchmark, rf, portfolioName }) {
   drawSectorDonut(qs("#fig-sector"), summary);
   drawRegionTreemap(qs("#fig-region"), holdings);
   drawTopHoldings(qs("#fig-top-holdings"), holdings);
+}
 
-  // Save for download
+async function render({ priceData, holdings, benchmark, rf, portfolioName }) {
+  const rfUsed = rf ?? DEFAULT_RF;
+  const summary = computeAll(priceData, holdings, benchmark, rfUsed);
+  const insights = buildInsights(summary, holdings, benchmark);
+
+  renderHeader(summary, benchmark, portfolioName);
+  renderKPIs(summary, benchmark, rfUsed);
+  renderStressTable(summary);
+  renderInsights(insights);
+
+  renderAllCharts({ priceData, holdings, benchmark, summary });
+
+  // Save for download + theme-toggle redraw
   window.__lastSummary = summary;
   window.__lastInsights = insights;
+  window.__lastState = { priceData, holdings, benchmark, summary };
 }
 
 // ---------- Session persistence (localStorage) ----------
@@ -1364,11 +1403,11 @@ function toast(msg, kind = "info", ms = 4000) {
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
   const btn = qs("#btn-theme");
-  if (btn) btn.textContent = theme === "dark" ? "☀ Light" : "🌙 Dark";
+  if (btn) btn.textContent = theme === "dark" ? "Light" : "Dark";
   try { localStorage.setItem("theme", theme); } catch (_) {}
-  // Re-draw plots to pick up new Plotly template if present
-  if (window.__lastSummary && typeof Plotly !== "undefined") {
-    try { Plotly.relayout(qs("#fig-cumulative"), { template: theme === "dark" ? "plotly_dark" : undefined }); } catch (_) {}
+  // Re-render every Plotly chart so axes, text, and gridlines pick up the new theme colors.
+  if (window.__lastState && window.__lastState.summary && typeof Plotly !== "undefined") {
+    try { renderAllCharts(window.__lastState); } catch (e) { console.warn("[theme] redraw failed:", e); }
   }
 }
 
