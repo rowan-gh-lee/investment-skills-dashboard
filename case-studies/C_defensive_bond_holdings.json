@@ -1,0 +1,10 @@
+[
+  {"ticker": "AGG", "name": "US Aggregate Bond ETF", "sector": "Bond",      "asset_class": "Bond",       "region": "US",     "weight": 0.40, "currency": "USD"},
+  {"ticker": "TLT", "name": "20+ Year US Treasury",  "sector": "Bond",      "asset_class": "Bond",       "region": "US",     "weight": 0.25, "currency": "USD"},
+  {"ticker": "GLD", "name": "Gold ETF",              "sector": "Commodity", "asset_class": "Commodity",  "region": "Global", "weight": 0.10, "currency": "USD"},
+  {"ticker": "IYR", "name": "US REIT ETF",           "sector": "REIT",      "asset_class": "RealEstate", "region": "US",     "weight": 0.08, "currency": "USD"},
+  {"ticker": "JNJ", "name": "Johnson & Johnson",     "sector": "Healthcare","asset_class": "Equity",     "region": "US",     "weight": 0.05, "currency": "USD"},
+  {"ticker": "PG",  "name": "Procter & Gamble",      "sector": "Consumer",  "asset_class": "Equity",     "region": "US",     "weight": 0.04, "currency": "USD"},
+  {"ticker": "V",   "name": "Visa Inc.",             "sector": "Financial", "asset_class": "Equity",     "region": "US",     "weight": 0.04, "currency": "USD"},
+  {"ticker": "XOM", "name": "Exxon Mobil",           "sector": "Energy",    "asset_class": "Equity",     "region": "US",     "weight": 0.04, "currency": "USD"}
+]

@@ -1,0 +1,143 @@
+{
+  "period": {
+    "start": "2023-03-21",
+    "end": "2026-04-17",
+    "trading_days": 804
+  },
+  "portfolio": {
+    "cagr": 0.189343,
+    "total_return": 0.661001,
+    "ann_vol": 0.155346,
+    "sharpe": 0.7985,
+    "sortino": 1.2592,
+    "mdd": -0.178592,
+    "mdd_peak": "2023-12-12",
+    "mdd_trough": "2024-03-21",
+    "calmar": 1.0602,
+    "hhi": 0.0578,
+    "var_95": 0.016389,
+    "cvar_95": 0.02072,
+    "var_99": 0.025329
+  },
+  "vs_benchmark": {
+    "ticker": "SPY",
+    "beta": 0.8248,
+    "alpha": 0.040518,
+    "cagr": 0.161996,
+    "ann_vol": 0.177753,
+    "mdd": -0.210044,
+    "tracking_error": 0.060054,
+    "information_ratio": 0.4554,
+    "up_capture_daily": 0.5137
+  },
+  "stress": [
+    {
+      "scenario": "2008 GFC (1일 최악)",
+      "pnl_pct": -0.0704,
+      "by_sector": {
+        "IT": -0.0306,
+        "Consumer": -0.009,
+        "Broad": -0.009,
+        "Communication": -0.0072,
+        "Financial": -0.0072,
+        "REIT": -0.0036,
+        "Energy": -0.0027,
+        "Healthcare": -0.0027,
+        "Commodity": 0.0,
+        "Bond": 0.0016
+      }
+    },
+    {
+      "scenario": "COVID-19 쇼크 (2020-03-16)",
+      "pnl_pct": -0.102,
+      "by_sector": {
+        "IT": -0.0408,
+        "Consumer": -0.012,
+        "Broad": -0.012,
+        "Communication": -0.0096,
+        "Financial": -0.0096,
+        "REIT": -0.0051,
+        "Energy": -0.0036,
+        "Healthcare": -0.0036,
+        "Bond": -0.0032,
+        "Commodity": -0.0025
+      }
+    },
+    {
+      "scenario": "테크 디레이팅 (금리 +100bp)",
+      "pnl_pct": -0.0354,
+      "by_sector": {
+        "IT": -0.0204,
+        "Bond": -0.0048,
+        "Communication": -0.004,
+        "Consumer": -0.003,
+        "Broad": -0.003,
+        "REIT": -0.0012,
+        "Healthcare": -0.0009,
+        "Commodity": 0.0,
+        "Energy": 0.0003,
+        "Financial": 0.0016
+      }
+    },
+    {
+      "scenario": "달러 초강세 (DXY +5%)",
+      "pnl_pct": -0.0191,
+      "by_sector": {
+        "IT": -0.0068,
+        "Consumer": -0.002,
+        "Broad": -0.002,
+        "Commodity": -0.002,
+        "Financial": -0.0016,
+        "Communication": -0.0016,
+        "Bond": -0.0016,
+        "Energy": -0.0006,
+        "Healthcare": -0.0006,
+        "REIT": -0.0003
+      }
+    },
+    {
+      "scenario": "에너지 쇼크 (유가 +30%)",
+      "pnl_pct": -0.0128,
+      "by_sector": {
+        "IT": -0.0068,
+        "Consumer": -0.003,
+        "Broad": -0.002,
+        "Financial": -0.0016,
+        "Communication": -0.0016,
+        "Bond": -0.0016,
+        "Healthcare": -0.0006,
+        "REIT": 0.0,
+        "Commodity": 0.002,
+        "Energy": 0.0024
+      }
+    }
+  ],
+  "composition": {
+    "by_sector": {
+      "IT": 0.34,
+      "Bond": 0.16,
+      "Broad": 0.1,
+      "Consumer": 0.1,
+      "Communication": 0.08,
+      "Financial": 0.08,
+      "Commodity": 0.05,
+      "Energy": 0.03,
+      "Healthcare": 0.03,
+      "REIT": 0.03
+    },
+    "by_asset_class": {
+      "Equity": 0.76,
+      "Bond": 0.16,
+      "Commodity": 0.05,
+      "RealEstate": 0.03
+    },
+    "by_region": {
+      "US": 0.76,
+      "KR": 0.12,
+      "Global": 0.05,
+      "DM-exUS": 0.04,
+      "EM": 0.03
+    },
+    "n_positions": 21
+  }
+}

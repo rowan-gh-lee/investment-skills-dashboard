@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "base": "USD",
+    "as_of": "2026-04-17",
+    "source": "static fallback table — override via ?fxRates= URL param or fx_rates.json next to holdings file",
+    "note": "Rates are expressed as 1 <code> = <rate> USD. Update when newer market data available."
+  },
+  "USD": 1.0,
+  "KRW": 0.000724,
+  "JPY": 0.00661,
+  "EUR": 1.09,
+  "GBP": 1.27,
+  "CNY": 0.138,
+  "HKD": 0.128,
+  "CHF": 1.14,
+  "CAD": 0.73,
+  "AUD": 0.66,
+  "SGD": 0.74
+}

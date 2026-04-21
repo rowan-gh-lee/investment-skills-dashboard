@@ -1,0 +1,122 @@
+{
+  "period": {
+    "start": "2023-03-21",
+    "end": "2026-04-17",
+    "trading_days": 804
+  },
+  "portfolio": {
+    "cagr": 0.109142,
+    "total_return": 0.367863,
+    "ann_vol": 0.055138,
+    "sharpe": 1.1459,
+    "sortino": 1.9289,
+    "mdd": -0.047134,
+    "mdd_peak": "2026-02-24",
+    "mdd_trough": "2026-04-15",
+    "calmar": 2.3156,
+    "hhi": 0.2462,
+    "var_95": 0.005585,
+    "cvar_95": 0.006771,
+    "var_99": 0.007341
+  },
+  "vs_benchmark": {
+    "ticker": "SPY",
+    "beta": 0.1647,
+    "alpha": 0.046505,
+    "cagr": 0.161996,
+    "ann_vol": 0.177753,
+    "mdd": -0.210044,
+    "tracking_error": 0.155657,
+    "information_ratio": -0.3396,
+    "up_capture_daily": 0.4863
+  },
+  "stress": [
+    {
+      "scenario": "2008 GFC (1일 최악)",
+      "pnl_pct": -0.0184,
+      "by_sector": {
+        "REIT": -0.0096,
+        "Healthcare": -0.0045,
+        "Consumer": -0.0036,
+        "Financial": -0.0036,
+        "Energy": -0.0036,
+        "Commodity": 0.0,
+        "Bond": 0.0065
+      }
+    },
+    {
+      "scenario": "COVID-19 쇼크 (2020-03-16)",
+      "pnl_pct": -0.052,
+      "by_sector": {
+        "REIT": -0.0136,
+        "Bond": -0.013,
+        "Healthcare": -0.006,
+        "Commodity": -0.005,
+        "Consumer": -0.0048,
+        "Financial": -0.0048,
+        "Energy": -0.0048
+      }
+    },
+    {
+      "scenario": "테크 디레이팅 (금리 +100bp)",
+      "pnl_pct": -0.0242,
+      "by_sector": {
+        "Bond": -0.0195,
+        "REIT": -0.0032,
+        "Healthcare": -0.0015,
+        "Consumer": -0.0012,
+        "Commodity": 0.0,
+        "Energy": 0.0004,
+        "Financial": 0.0008
+      }
+    },
+    {
+      "scenario": "달러 초강세 (DXY +5%)",
+      "pnl_pct": -0.0147,
+      "by_sector": {
+        "Bond": -0.0065,
+        "Commodity": -0.004,
+        "Healthcare": -0.001,
+        "REIT": -0.0008,
+        "Consumer": -0.0008,
+        "Financial": -0.0008,
+        "Energy": -0.0008
+      }
+    },
+    {
+      "scenario": "에너지 쇼크 (유가 +30%)",
+      "pnl_pct": -0.0023,
+      "by_sector": {
+        "Bond": -0.0065,
+        "Consumer": -0.0012,
+        "Healthcare": -0.001,
+        "Financial": -0.0008,
+        "REIT": 0.0,
+        "Energy": 0.0032,
+        "Commodity": 0.004
+      }
+    }
+  ],
+  "composition": {
+    "by_sector": {
+      "Bond": 0.65,
+      "Commodity": 0.1,
+      "REIT": 0.08,
+      "Healthcare": 0.05,
+      "Consumer": 0.04,
+      "Energy": 0.04,
+      "Financial": 0.04
+    },
+    "by_asset_class": {
+      "Bond": 0.65,
+      "Equity": 0.17,
+      "Commodity": 0.1,
+      "RealEstate": 0.08
+    },
+    "by_region": {
+      "US": 0.9,
+      "Global": 0.1
+    },
+    "n_positions": 8
+  }
+}

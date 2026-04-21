@@ -1,0 +1,10 @@
+[
+  {"ticker": "AAPL",  "name": "Apple Inc.",      "sector": "IT",            "asset_class": "Equity", "region": "US", "weight": 0.22, "currency": "USD"},
+  {"ticker": "MSFT",  "name": "Microsoft Corp.", "sector": "IT",            "asset_class": "Equity", "region": "US", "weight": 0.20, "currency": "USD"},
+  {"ticker": "NVDA",  "name": "NVIDIA Corp.",    "sector": "IT",            "asset_class": "Equity", "region": "US", "weight": 0.18, "currency": "USD"},
+  {"ticker": "GOOGL", "name": "Alphabet Inc.",   "sector": "Communication", "asset_class": "Equity", "region": "US", "weight": 0.12, "currency": "USD"},
+  {"ticker": "AMZN",  "name": "Amazon.com Inc.", "sector": "Consumer",      "asset_class": "Equity", "region": "US", "weight": 0.10, "currency": "USD"},
+  {"ticker": "TSLA",  "name": "Tesla Inc.",      "sector": "Consumer",      "asset_class": "Equity", "region": "US", "weight": 0.08, "currency": "USD"},
+  {"ticker": "005930.KS","name": "삼성전자",      "sector": "IT",            "asset_class": "Equity", "region": "KR", "weight": 0.05, "currency": "KRW"},
+  {"ticker": "000660.KS","name": "SK하이닉스",    "sector": "IT",            "asset_class": "Equity", "region": "KR", "weight": 0.05, "currency": "KRW"}
+]

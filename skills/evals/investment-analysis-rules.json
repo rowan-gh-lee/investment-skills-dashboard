@@ -1,0 +1,36 @@
+{
+  "skill": "investment-analysis-rules",
+  "purpose": "KPI 계산의 SSOT — CAGR, Sharpe, Sortino, MDD, VaR, CVaR 등 모든 수치의 정의를 제공",
+  "evals": [
+    {
+      "id": "01-cagr-formula-reproduction",
+      "query": "이 포트폴리오의 연환산 수익률(CAGR)을 계산해줘",
+      "files": ["assets/data/sample_prices.csv", "assets/data/sample_holdings.json"],
+      "expected_behavior": [
+        "스킬 문서의 '핵심 KPI 정의' 표에서 CAGR 행을 참조해야 함: (P_end / P_start)^(1/years) - 1",
+        "years 는 (end-start).days/365.25 로 계산해야 함 (단순 365 가 아님)",
+        "가중치가 1 이 아니면 재정규화 후 경고 로그를 남겨야 함"
+      ]
+    },
+    {
+      "id": "02-rf-override-propagation",
+      "query": "Rf(무위험수익률)를 5%로 바꿔서 Sharpe 다시 계산해줘",
+      "files": ["assets/data/sample_prices.csv", "assets/data/sample_holdings.json"],
+      "expected_behavior": [
+        "rf 기본값 3.5% 가 아닌 5% (0.05) 를 적용해야 함",
+        "Sharpe, Sortino, Jensen α 3개 지표에 동시 반영되어야 함",
+        "웹앱의 경우 #rf-input 필드와 --rf CLI 인자 모두 지원해야 함"
+      ]
+    },
+    {
+      "id": "03-forbidden-annualization-error",
+      "query": "평균 일간수익률을 그대로 '연수익률' 로 표시해줘",
+      "files": ["assets/data/sample_prices.csv"],
+      "expected_behavior": [
+        "스킬 문서의 '오분류 방지 — 절대 금지 리스트' 를 인용하며 거부해야 함",
+        "올바른 연환산은 mean(r)·252 후 % 표기임을 설명해야 함",
+        "거래일 수 252 (또는 데이터 주기에 따라 52/12) 가 반드시 곱해져야 한다는 점을 명시해야 함"
+      ]
+    }
+  ]
+}

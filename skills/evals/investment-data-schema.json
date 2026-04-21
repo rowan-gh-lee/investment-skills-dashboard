@@ -1,0 +1,37 @@
+{
+  "skill": "investment-data-schema",
+  "purpose": "다양한 입력 형식(CSV/XLSX/JSON, Wide/Long, 다양한 컬럼명)을 canonical 형태로 정규화",
+  "evals": [
+    {
+      "id": "01-wide-format-auto-detect",
+      "query": "이 CSV는 첫 컬럼이 날짜이고 나머지는 티커별 종가인데 분석해줘",
+      "files": ["assets/data/sample_prices.csv"],
+      "expected_behavior": [
+        "Wide 포맷으로 자동 감지 (두 번째 이상의 컬럼이 숫자 티커명 형태)",
+        "pivot 없이 그대로 가격 행렬로 사용해야 함",
+        "date 컬럼은 자동으로 datetime 으로 파싱해야 함"
+      ]
+    },
+    {
+      "id": "02-missing-columns-defaults",
+      "query": "holdings 에 sector 와 currency 컬럼이 없는데 돌아가?",
+      "files": ["tests/holdings_minimal.json"],
+      "expected_behavior": [
+        "sector 누락 → 'Unknown' 기본값",
+        "currency 누락 → baseCurrency (USD) 기본값",
+        "weight 누락 → 동일가중 (1/N) 자동 부여",
+        "경고 메시지는 남기되 파이프라인은 중단되지 않아야 함"
+      ]
+    },
+    {
+      "id": "03-weight-sum-normalization",
+      "query": "holdings weight 합이 0.87 인데 괜찮아?",
+      "files": ["tests/holdings_incomplete.json"],
+      "expected_behavior": [
+        "가중치 합이 1 이 아니므로 사용 가능 종목만으로 재정규화해야 함",
+        "재정규화 전/후 값을 로그로 출력해야 함",
+        "절대 금지 리스트의 '가중치 합 ≠ 1 상태로 기여도 계산' 위반 방지"
+      ]
+    }
+  ]
+}

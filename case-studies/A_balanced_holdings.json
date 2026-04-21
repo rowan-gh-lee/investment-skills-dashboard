@@ -1,0 +1,17 @@
+[
+  {"ticker": "AAPL",     "name": "Apple Inc.",            "sector": "IT",            "asset_class": "Equity",     "region": "US",        "weight": 0.08, "currency": "USD"},
+  {"ticker": "MSFT",     "name": "Microsoft Corp.",       "sector": "IT",            "asset_class": "Equity",     "region": "US",        "weight": 0.08, "currency": "USD"},
+  {"ticker": "GOOGL",    "name": "Alphabet Inc.",         "sector": "Communication", "asset_class": "Equity",     "region": "US",        "weight": 0.05, "currency": "USD"},
+  {"ticker": "JPM",      "name": "JPMorgan Chase",        "sector": "Financial",     "asset_class": "Equity",     "region": "US",        "weight": 0.04, "currency": "USD"},
+  {"ticker": "XOM",      "name": "Exxon Mobil",           "sector": "Energy",        "asset_class": "Equity",     "region": "US",        "weight": 0.03, "currency": "USD"},
+  {"ticker": "JNJ",      "name": "Johnson & Johnson",     "sector": "Healthcare",    "asset_class": "Equity",     "region": "US",        "weight": 0.04, "currency": "USD"},
+  {"ticker": "PG",       "name": "Procter & Gamble",      "sector": "Consumer",      "asset_class": "Equity",     "region": "US",        "weight": 0.03, "currency": "USD"},
+  {"ticker": "V",        "name": "Visa Inc.",             "sector": "Financial",     "asset_class": "Equity",     "region": "US",        "weight": 0.03, "currency": "USD"},
+  {"ticker": "005930.KS","name": "삼성전자",              "sector": "IT",            "asset_class": "Equity",     "region": "KR",        "weight": 0.05, "currency": "KRW"},
+  {"ticker": "EFA",      "name": "MSCI EAFE ETF",         "sector": "Broad",         "asset_class": "Equity",     "region": "DM-exUS",   "weight": 0.05, "currency": "USD"},
+  {"ticker": "EEM",      "name": "MSCI EM ETF",           "sector": "Broad",         "asset_class": "Equity",     "region": "EM",        "weight": 0.04, "currency": "USD"},
+  {"ticker": "IYR",      "name": "US REIT ETF",           "sector": "REIT",          "asset_class": "RealEstate", "region": "US",        "weight": 0.05, "currency": "USD"},
+  {"ticker": "GLD",      "name": "Gold ETF",              "sector": "Commodity",     "asset_class": "Commodity",  "region": "Global",    "weight": 0.08, "currency": "USD"},
+  {"ticker": "AGG",      "name": "US Aggregate Bond ETF", "sector": "Bond",          "asset_class": "Bond",       "region": "US",        "weight": 0.20, "currency": "USD"},
+  {"ticker": "TLT",      "name": "20+ Year US Treasury",  "sector": "Bond",          "asset_class": "Bond",       "region": "US",        "weight": 0.15, "currency": "USD"}
+]
