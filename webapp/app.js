@@ -241,6 +241,18 @@ function logReturns(series) {
 
 function portfolioReturns(prices, dates, holdings) {
   const usable = holdings.filter(h => prices[h.ticker]);
+  const missing = holdings.filter(h => !prices[h.ticker]);
+  if (missing.length) {
+    const tickers = missing.map(h => h.ticker).join(", ");
+    const lost = missing.reduce((s, h) => s + Number(h.weight || 0), 0);
+    console.warn(`[portfolio] 누락된 티커 ${missing.length}개 (가중치 ${(lost*100).toFixed(1)}%): ${tickers}`);
+    // Expose for UI surfacing in render()
+    if (typeof window !== "undefined") {
+      window.__missingTickers = { tickers: missing.map(h => h.ticker), lost_weight: lost };
+    }
+  } else if (typeof window !== "undefined") {
+    window.__missingTickers = null;
+  }
   const wsum = usable.reduce((s, h) => s + h.weight, 0);
   const weights = usable.map(h => h.weight / wsum);
   const tickerRets = usable.map(h => logReturns(prices[h.ticker]));
@@ -1054,22 +1066,63 @@ function renderAllCharts(ctx) {
   drawTopHoldings(qs("#fig-top-holdings"), holdings);
 }
 
+// Resolve benchmark against available price data. If requested ticker isn't
+// present, walk a region-aware fallback list and use whichever matches first.
+// Returns { effective, fallback, requested, available }.
+function resolveBenchmark(requested, priceData) {
+  const FALLBACKS = ["SPY", "ACWI", "VT", "KOSPI", "^KS11", "069500.KS", "NIKKEI", "^N225"];
+  const prices = priceData?.prices || {};
+  if (requested && prices[requested]) {
+    return { effective: requested, fallback: false, requested, available: true };
+  }
+  for (const f of FALLBACKS) {
+    if (f === requested) continue;
+    if (prices[f]) {
+      return { effective: f, fallback: true, requested, available: true };
+    }
+  }
+  return { effective: null, fallback: true, requested, available: false };
+}
+
 async function render({ priceData, holdings, benchmark, rf, portfolioName }) {
   const rfUsed = rf ?? DEFAULT_RF;
-  const summary = computeAll(priceData, holdings, benchmark, rfUsed);
-  const insights = buildInsights(summary, holdings, benchmark);
+  const resolved = resolveBenchmark(benchmark, priceData);
+  const effBench = resolved.effective || benchmark;
+  const summary = computeAll(priceData, holdings, effBench, rfUsed);
+  const insights = buildInsights(summary, holdings, effBench);
 
-  renderHeader(summary, benchmark, portfolioName);
-  renderKPIs(summary, benchmark, rfUsed);
+  renderHeader(summary, effBench, portfolioName);
+  renderKPIs(summary, effBench, rfUsed);
   renderStressTable(summary);
   renderInsights(insights);
 
-  renderAllCharts({ priceData, holdings, benchmark, summary });
+  renderAllCharts({ priceData, holdings, benchmark: effBench, summary });
+
+  // Surface benchmark validation result into the UI (non-blocking).
+  const benchStatus = qs("#bench-status");
+  if (benchStatus) {
+    if (!resolved.available) {
+      benchStatus.textContent = `✗ '${benchmark}'를 가격 데이터에서 찾을 수 없음 · 벤치마크 지표 비활성`;
+      benchStatus.className = "status-line status-warn";
+    } else if (resolved.fallback) {
+      benchStatus.textContent = `↻ '${benchmark}' 없음 → '${effBench}'로 폴백`;
+      benchStatus.className = "status-line status-warn";
+    } else {
+      benchStatus.textContent = `✓ 벤치마크: ${effBench}`;
+      benchStatus.className = "status-line status-ok";
+    }
+  }
+  // Surface missing-ticker warnings from portfolioReturns.
+  const hs = qs("#holdings-status");
+  if (hs && window.__missingTickers) {
+    const { tickers, lost_weight } = window.__missingTickers;
+    hs.textContent = `⚠ 누락 티커 ${tickers.length}개 (${(lost_weight*100).toFixed(1)}%): ${tickers.slice(0,5).join(", ")}${tickers.length>5?"...":""} · 가중치 재분배됨`;
+  }
 
   // Save for download + theme-toggle redraw
   window.__lastSummary = summary;
   window.__lastInsights = insights;
-  window.__lastState = { priceData, holdings, benchmark, summary };
+  window.__lastState = { priceData, holdings, benchmark: effBench, summary };
 }
 
 // ---------- Session persistence (localStorage) ----------
@@ -1208,6 +1261,17 @@ function wireUI(state) {
     const v = qs("#bench-input").value.trim();
     state.benchmark = v || "SPY";
     saveSession(state);
+    // Pre-validate so the user gets immediate feedback via toast even though
+    // render() also updates #bench-status.
+    const pd = state.priceData || state.priceDataBase || state.priceDataRaw;
+    if (pd) {
+      const r = resolveBenchmark(state.benchmark, pd);
+      if (!r.available) {
+        toast(`'${state.benchmark}'를 가격 데이터에서 찾을 수 없음 · 벤치마크 지표 비활성`, "error", 4000);
+      } else if (r.fallback) {
+        toast(`'${state.benchmark}' 없음 → '${r.effective}'로 폴백`, "info", 3500);
+      }
+    }
     maybeRender(state);
   });
   qs("#bench-input").addEventListener("keydown", (e) => {

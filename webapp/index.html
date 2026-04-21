@@ -114,6 +114,11 @@
   .controls select:hover { border-color: var(--accent); }
   .controls label { font-size: 12px; color: var(--muted); }
   .controls .status { font-size: 11.5px; color: var(--muted); }
+  .controls .status-line { font-size: 11.5px; color: var(--muted); padding: 2px 8px; border-radius: 6px; }
+  .controls .status-line.status-ok { color: #0a7a34; background: #e8f5ee; }
+  .controls .status-line.status-warn { color: #b45309; background: #fff4e1; }
+  html[data-theme="dark"] .controls .status-line.status-ok { color: #6ddc95; background: rgba(40,100,60,0.25); }
+  html[data-theme="dark"] .controls .status-line.status-warn { color: #ffc57a; background: rgba(120,70,20,0.35); }
   .controls .divider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
   .controls input[type=file] { display: none; }
 
@@ -383,6 +388,7 @@
       </select>
       <input type="text" id="bench-input" value="SPY" title="직접 티커 입력 (Enter)" />
       <button id="btn-bench" class="ghost">적용</button>
+      <span class="status-line" id="bench-status" title="벤치마크 해결 상태"></span>
       <div class="divider"></div>
       <label title="무위험 수익률 (Sharpe/Sortino/Alpha 계산에 사용)">Rf</label>
       <input type="number" id="rf-input" value="0.035" step="0.005" min="0" max="0.2" style="width:72px" title="연 무위험 수익률 (기본 3.5%). 변경 시 자동 재계산" />
