@@ -738,13 +738,17 @@ function drawStress(el, summary) {
   const vals = st.map(s => s.pnl_pct * 100);
   const colors = vals.map(v => v >= 0 ? COL_POS : COL_NEG);
   const lay = baseLayout("스트레스 시나리오별 1일 포트 손익");
+  lay.margin = { l: 200, r: 48, t: 44, b: 40 };
   lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid, zeroline: true, zerolinecolor: lay._c.zeroline };
-  lay.yaxis = { showgrid: false };
+  lay.yaxis = {
+    showgrid: false, automargin: true,
+    tickfont: { size: 12, color: lay._c.ink, family: FONT },
+  };
   Plotly.react(el, [{
     type: "bar", orientation: "h", x: vals, y: names,
     marker: { color: colors },
     text: vals.map(v => `${v > 0 ? "+" : ""}${v.toFixed(2)}%`), textposition: "outside",
-    hovertemplate: "%{y}<br>포트 손익 %{x:+.2f}%<extra></extra>",
+    hovertemplate: "<b>%{y}</b><br>포트 손익 %{x:+.2f}%<extra></extra>",
   }], lay, plotConfig());
 }
 

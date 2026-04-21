@@ -239,7 +239,19 @@
 
   /* ─── Dark-mode overrides for elements with hardcoded light colors ─── */
   html[data-theme="dark"] #stress-table th { background: #0a1426; color: var(--ink); }
-  html[data-theme="dark"] .controls button.ghost:hover { background: #1a2744; }
+  html[data-theme="dark"] .controls { background: var(--card); }
+  html[data-theme="dark"] .controls button.ghost {
+    background: #1a2744; color: var(--ink); border-color: #2a3a5a;
+  }
+  html[data-theme="dark"] .controls button.ghost:hover { background: #223355; border-color: var(--accent); }
+  html[data-theme="dark"] .controls button { background: #2a6da8; color: #f1f7ff; }
+  html[data-theme="dark"] .controls button:hover { background: #3485c7; }
+  html[data-theme="dark"] .controls input[type=text],
+  html[data-theme="dark"] .controls input[type=date],
+  html[data-theme="dark"] .controls input[type=number] {
+    background: #0b1628; color: var(--ink); border-color: #2a3a5a;
+  }
+  html[data-theme="dark"] .controls input::placeholder { color: #6c7f98; }
   html[data-theme="dark"] footer code { background: #1a2744; color: var(--muted); }
   html[data-theme="dark"] .kpi-tooltip { background: #050b1a; border: 1px solid #2a3a5a; }
 
