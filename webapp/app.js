@@ -546,12 +546,12 @@ const baseLayout = (title, h = 360) => {
   const c = themeColors();
   return {
     title: { text: title, x: 0.01, xanchor: "left", font: { size: 14, color: c.titleFill } },
-    margin: { l: 50, r: 20, t: 44, b: 40 },
+    margin: { l: 64, r: 24, t: 48, b: 44 },
     height: h,
     font: { family: FONT, size: 12, color: c.ink },
     plot_bgcolor: "rgba(0,0,0,0)", paper_bgcolor: "rgba(0,0,0,0)",
     hovermode: "x unified",
-    legend: { orientation: "h", yanchor: "bottom", y: 1.02, xanchor: "right", x: 1,
+    legend: { orientation: "h", yanchor: "bottom", y: 1.04, xanchor: "right", x: 1,
               bgcolor: "rgba(0,0,0,0)", font: { color: c.ink } },
     _c: c, // attach for downstream consumers
   };
@@ -569,7 +569,9 @@ function drawCumulative(el, summary, benchmark) {
     line: { color: COL_BENCH, width: 1.8, dash: "dot" },
     hovertemplate: `%{x|%Y-%m-%d}<br>${benchmark} %{y:.2f}%<extra></extra>`,
   });
-  const lay = baseLayout("누적 수익률 (%)");
+  // Card's <h3> already provides the title — suppress chart title to avoid overlap with rangeselector
+  const lay = baseLayout("");
+  lay.margin = { l: 60, r: 24, t: 56, b: 40 };
   lay.xaxis = { showgrid: true, gridcolor: lay._c.grid,
                 rangeselector: {
                   buttons: [
@@ -579,10 +581,14 @@ function drawCumulative(el, summary, benchmark) {
                     { count: 3, label: "3Y", step: "year", stepmode: "backward" },
                     { step: "all", label: "전체" },
                   ],
-                  bgcolor: lay._c.selectorBg, activecolor: "#2E86AB", font: { size: 11, color: lay._c.ink }, y: 1.08,
+                  bgcolor: lay._c.selectorBg, activecolor: "#2E86AB",
+                  font: { size: 11, color: lay._c.ink }, y: 1.12, x: 0,
                 },
                 rangeslider: { visible: true, thickness: 0.05, bgcolor: lay._c.sliderBg } };
-  lay.yaxis = { showgrid: true, gridcolor: lay._c.grid, ticksuffix: "%" };
+  lay.yaxis = { title: { text: "누적 수익률", font: { size: 11, color: lay._c.muted } },
+                showgrid: true, gridcolor: lay._c.grid, ticksuffix: "%", automargin: true };
+  // Position legend below the rangeselector row to prevent overlap
+  lay.legend = { ...lay.legend, y: 1.18 };
   // MDD peak → trough annotation
   const p = summary.portfolio;
   if (p.mdd_peak && p.mdd_trough) {
@@ -710,8 +716,15 @@ function drawRollingSB(el, summary, benchmark) {
     });
   }
   const lay = baseLayout(`롤링 Sharpe & Beta (${w}일)`);
-  lay.yaxis = { title: "Sharpe", showgrid: true, gridcolor: lay._c.grid };
-  lay.yaxis2 = { title: "Beta", overlaying: "y", side: "right", showgrid: false };
+  lay.margin = { l: 60, r: 60, t: 44, b: 40 };
+  lay.yaxis = {
+    title: { text: "Sharpe", font: { size: 11, color: lay._c.muted } },
+    showgrid: true, gridcolor: lay._c.grid, automargin: true,
+  };
+  lay.yaxis2 = {
+    title: { text: "Beta", font: { size: 11, color: lay._c.muted } },
+    overlaying: "y", side: "right", showgrid: false, automargin: true,
+  };
   lay.xaxis = { showgrid: true, gridcolor: lay._c.grid };
   lay.shapes = [{ type: "line", x0: rDates[0], x1: rDates[rDates.length-1], y0:0, y1:0,
                   line: { color: lay._c.zeroline, dash: "dash" } }];
@@ -737,9 +750,17 @@ function drawStress(el, summary) {
   const names = st.map(s => s.scenario);
   const vals = st.map(s => s.pnl_pct * 100);
   const colors = vals.map(v => v >= 0 ? COL_POS : COL_NEG);
+  // Widen x-range so outside-positioned %text doesn't crowd the y-axis tick labels.
+  // Add 25% headroom on the negative side so "-10.20%" has breathing room.
+  const minV = Math.min(0, ...vals), maxV = Math.max(0, ...vals);
+  const pad = Math.max(Math.abs(minV), Math.abs(maxV)) * 0.25;
   const lay = baseLayout("스트레스 시나리오별 1일 포트 손익");
-  lay.margin = { l: 200, r: 48, t: 44, b: 40 };
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid, zeroline: true, zerolinecolor: lay._c.zeroline };
+  lay.margin = { l: 210, r: 56, t: 44, b: 40 };
+  lay.xaxis = {
+    ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid,
+    zeroline: true, zerolinecolor: lay._c.zeroline,
+    range: [minV - pad, maxV + pad],
+  };
   lay.yaxis = {
     showgrid: false, automargin: true,
     tickfont: { size: 12, color: lay._c.ink, family: FONT },
@@ -748,6 +769,7 @@ function drawStress(el, summary) {
     type: "bar", orientation: "h", x: vals, y: names,
     marker: { color: colors },
     text: vals.map(v => `${v > 0 ? "+" : ""}${v.toFixed(2)}%`), textposition: "outside",
+    cliponaxis: false,
     hovertemplate: "<b>%{y}</b><br>포트 손익 %{x:+.2f}%<extra></extra>",
   }], lay, plotConfig());
 }
@@ -780,15 +802,25 @@ function drawCorrelation(el, priceData, holdings, topN = 8) {
 function drawAssetClassBar(el, summary) {
   const a = Object.entries(summary.composition.by_asset_class).sort((x, y) => x[1] - y[1]);
   const colors = [COL_PORT, COL_ACCENT, COL_NEUTRAL, COL_POS, COL_BENCH];
+  const xs = a.map(([_, v]) => v * 100);
+  const maxX = Math.max(...xs, 1);
   const lay = baseLayout("자산군 비중");
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid };
-  lay.yaxis = { showgrid: false };
+  lay.margin = { l: 110, r: 56, t: 44, b: 40 };
+  lay.xaxis = {
+    ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid,
+    range: [0, maxX * 1.18],
+  };
+  lay.yaxis = {
+    showgrid: false, automargin: true,
+    tickfont: { size: 12, color: lay._c.ink, family: FONT },
+  };
   Plotly.react(el, [{
     type: "bar", orientation: "h",
-    x: a.map(([_, v]) => v * 100), y: a.map(([k]) => k),
+    x: xs, y: a.map(([k]) => k),
     marker: { color: a.map((_, i) => colors[i % colors.length]) },
     text: a.map(([_, v]) => `${(v * 100).toFixed(2)}%`), textposition: "outside",
-    hovertemplate: "%{y}<br>비중 %{x:.2f}%<extra></extra>",
+    cliponaxis: false,
+    hovertemplate: "<b>%{y}</b><br>비중 %{x:.2f}%<extra></extra>",
   }], lay, plotConfig());
 }
 
@@ -842,21 +874,27 @@ function drawRegionTreemap(el, holdings) {
 
 function drawTopHoldings(el, holdings, n = 10) {
   const sorted = [...holdings].sort((a, b) => a.weight - b.weight).slice(-n);
+  const xs = sorted.map(h => h.weight * 100);
+  const maxX = Math.max(...xs, 1);
   const lay = baseLayout(`Top ${n} 비중 종목`);
-  // Reserve a fixed-width left gutter for ticker labels; automargin ensures nothing clips.
-  lay.margin = { l: 76, r: 48, t: 44, b: 40 };
-  lay.xaxis = { ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid };
+  // Reserve left gutter for ticker labels + padded x-range so outside text doesn't clip
+  lay.margin = { l: 90, r: 60, t: 44, b: 40 };
+  lay.xaxis = {
+    ticksuffix: "%", showgrid: true, gridcolor: lay._c.grid,
+    range: [0, maxX * 1.22],
+  };
   lay.yaxis = {
     showgrid: false, automargin: true,
     tickfont: { size: 12, color: lay._c.ink, family: FONT },
   };
   Plotly.react(el, [{
     type: "bar", orientation: "h",
-    x: sorted.map(h => h.weight * 100),
+    x: xs,
     y: sorted.map(h => h.ticker),                       // short, fully visible
     customdata: sorted.map(h => h.name || ""),          // full name in hover
     marker: { color: COL_PORT },
     text: sorted.map(h => `${(h.weight * 100).toFixed(2)}%`), textposition: "outside",
+    cliponaxis: false,
     hovertemplate: "<b>%{y}</b> · %{customdata}<br>비중 %{x:.2f}%<extra></extra>",
   }], lay, plotConfig());
 }

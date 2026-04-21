@@ -299,21 +299,36 @@
   /* ─── Print / PDF ─── */
   @media print {
     @page { size: A3 portrait; margin: 10mm; }
-    body { background: #fff; font-size: 11px; }
+    html, body { background: #fff !important; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    /* Force light palette in print even if user toggled dark */
+    html[data-theme="dark"] {
+      --bg: #fff; --card: #fff; --border: #d7dde6;
+      --ink: #0f172a; --muted: #64748b; --accent: #2E86AB;
+    }
     .controls { display: none !important; }
+    #toast-root { display: none !important; }
     .shell { max-width: 100%; padding: 0; }
-    .header { border-radius: 0; box-shadow: none; padding: 18px 24px 48px; break-inside: avoid; }
+    .header { border-radius: 0; box-shadow: none; padding: 18px 24px 40px; break-inside: avoid; page-break-after: avoid; }
     .header h1 { font-size: 20px; }
-    .exec-band { margin-top: -30px; box-shadow: none; break-inside: avoid; }
-    .card, .insights { box-shadow: none; break-inside: avoid; }
-    .kpi-grid { grid-template-columns: repeat(7, 1fr); gap: 6px; }
-    .kpi-card { min-height: 70px; padding: 8px 10px; break-inside: avoid; }
+    .header .meta { gap: 14px; }
+    .exec-band { margin-top: -24px; box-shadow: none; break-inside: avoid; page-break-after: avoid; }
+    .kpi-grid { grid-template-columns: repeat(7, 1fr); gap: 6px; break-inside: avoid; page-break-after: avoid; }
+    .kpi-card { min-height: 68px; padding: 8px 10px; break-inside: avoid; }
     .kpi-value { font-size: 15px; }
-    .row { break-inside: auto; }
+    /* Keep each row of charts together on one page */
+    .row, .row-2, .row-2-wide, .row-2b, .row-3 { break-inside: avoid; page-break-inside: avoid; }
     .row-2-wide { grid-template-columns: 1.6fr 1fr; }
     .row-2 { grid-template-columns: 1.15fr 1fr; }
     .row-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .fig { min-height: 280px; }
+    /* Each card atomic — never split across pages */
+    .card, .insights { box-shadow: none; break-inside: avoid; page-break-inside: avoid; border-color: #d7dde6; }
+    .card h3 { font-size: 12px; }
+    .card .caption { font-size: 10.5px; }
+    .fig { min-height: 300px; }
+    .fig-tall { min-height: 340px; }
+    #stress-table th, #stress-table td { padding: 6px 8px; font-size: 10.5px; }
+    .insights { border-color: #d7dde6; background: #fff; }
+    .insights li { page-break-inside: avoid; }
     footer { display: none; }
   }
 </style>
